@@ -1,3 +1,4 @@
+import math
 import matplotlib.pyplot as plt
 
 class Sequence:
@@ -7,23 +8,21 @@ class Sequence:
         self.initial_terms = initial_terms if initial_terms else []
         self.sequence = []
 
-    def generate_terms(self, n):
+    def generate_terms(self, start, end):
+        n = end - start + 1
         if self.recursive:
             self.sequence = self.initial_terms[:]
             for i in range(len(self.initial_terms), n):
                 self.sequence.append(self.definition(self.sequence, i))
         else:
-            self.sequence = [self.definition(i) for i in range(1, n + 1)]
+            self.sequence = [self.definition(i) for i in range(start, end + 1)]
         return self.sequence
 
-    def plot(self, n):
-        terms = self.generate_terms(n)
+    def plot_terms(self, start, end):
+        terms = self.generate_terms(start, end)
         plt.figure(figsize=(10, 6))
-        plt.scatter(range(1, n + 1), terms, color='blue', marker='o')
-        
-        for i, term in enumerate(terms, start=1):
-            plt.annotate(f'{term:.2f}', (i, term), textcoords="offset points", xytext=(0,10), ha='center')
-        
+        plt.scatter(range(start, end + 1), terms, color='blue', marker='o')
+
         plt.axhline(0, color='black', linewidth=1.5)
         plt.axvline(0, color='black', linewidth=1.5)
         
@@ -36,15 +35,19 @@ class Sequence:
 # Example usage
 
 # Alternating sequence
-# alt_seq = Sequence(lambda n: (1/n)*(-1)**n)
-# alt_seq.plot(20)
+# alt_seq = Sequence(lambda n: (1/n))
+# alt_seq.plot_terms(start=5, end=20)
 
 # Lucas sequence
 # lucas_seq = Sequence(lambda seq, n: seq[n-1] + seq[n-2], recursive=True, initial_terms=[2, 1])
-# lucas_seq.plot(20)
+# lucas_seq.plot_terms(20, start=5)
 
 # Geometric sequence
-a = 10
-r = 100/98
-geo_seq = Sequence(lambda n: a*r**(n-1))
-geo_seq.plot(20)
+# a = 10
+# r = 100/98
+# geo_seq = Sequence(lambda n: a*r**(n-1))
+# geo_seq.plot_terms(20, start=5)
+
+# Generalized Bertrand sequence
+# bertrand_seq = Sequence(lambda n: 1/(n*math.log(n)*math.log(math.log(n))*math.log(math.log(math.log(n)))*math.log(math.log(math.log(math.log(n))))))
+# bertrand_seq.plot_terms(100000, start=10000)
